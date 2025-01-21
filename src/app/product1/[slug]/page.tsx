@@ -3,14 +3,12 @@ import { notFound } from "next/navigation";
 import { client, urlForImage } from "@/sanity/lib/sanity";
 import { ProductDetails } from "@/components/ProductDetails";
 
-// Define the props for the ProductPage
-interface ProductPageProps {
-  params: {
-    slug: string;
-  };
-}
+// Correct type for props
+type ProductPageProps = {
+  params: { slug: string };
+};
 
-// Fetch the product from Sanity based on the slug
+// Function to fetch product details
 async function getProduct(slug: string) {
   const query = `*[_type == "product" && slug.current == $slug][0]{
     _id,
@@ -30,12 +28,10 @@ async function getProduct(slug: string) {
   return product || null;
 }
 
-// Generate metadata for the page based on the product
+// Generate metadata for the page
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string };
-}): Promise<Metadata> {
+}: ProductPageProps): Promise<Metadata> {
   const product = await getProduct(params.slug);
 
   if (!product) {
@@ -50,12 +46,8 @@ export async function generateMetadata({
   };
 }
 
-// Default export function for rendering the ProductPage
-export default async function ProductPage({
-  params,
-}: {
-  params: { slug: string };
-}) {
+// Main Product Page component
+export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProduct(params.slug);
 
   if (!product) {
