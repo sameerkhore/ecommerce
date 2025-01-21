@@ -3,12 +3,12 @@ import { notFound } from "next/navigation";
 import { client, urlForImage } from "@/sanity/lib/sanity";
 import { ProductDetails } from "@/components/ProductDetails";
 
-// Correct type for props
-type ProductPageProps = {
-  params: { slug: string };
-};
+// Correct type for page props
+interface ProductPageProps {
+  params: { slug: string }; // Dynamic route parameter
+}
 
-// Function to fetch product details
+// Function to fetch product details from Sanity
 async function getProduct(slug: string) {
   const query = `*[_type == "product" && slug.current == $slug][0]{
     _id,
@@ -21,14 +21,14 @@ async function getProduct(slug: string) {
 
   const product = await client.fetch(query, { slug });
 
-  if (product && product.imageUrl) {
+  if (product?.imageUrl) {
     product.imageUrl = urlForImage(product.imageUrl).url();
   }
 
-  return product || null;
+  return product || null; // Ensure null fallback for safety
 }
 
-// Generate metadata for the page
+// Function to generate metadata dynamically
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
@@ -46,12 +46,12 @@ export async function generateMetadata({
   };
 }
 
-// Main Product Page component
+// Main Product Page Component
 export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProduct(params.slug);
 
   if (!product) {
-    notFound();
+    notFound(); // Redirect to 404 page if product not found
   }
 
   return (
