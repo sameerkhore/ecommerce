@@ -8,10 +8,12 @@ export const client = createClient({
   useCdn: true
 })
 
-
-const imageBuilder = createImageUrlBuilder(client)
-
-export const urlForImage = (source: any) => {
-  return imageBuilder?.image(source).auto("format").fit("max")
+export function urlForImage(source: any) {
+  return `<Sanity Image URL Builder Logic>`;
 }
+// const imageBuilder = createImageUrlBuilder(client)
+
+// export const urlForImage = (source: any) => {
+//   return imageBuilder?.image(source).auto("format").fit("max")
+// }
 

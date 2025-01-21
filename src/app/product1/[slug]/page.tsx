@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { client, urlForImage } from "@/sanity/lib/sanity";
+import { client } from "@/sanity/lib/sanity";
 import { ProductDetails } from "@/components/ProductDetails";
 
-// Correct type for page props
+// Define the type for page props
 interface ProductPageProps {
-  params: { slug: string }; // Dynamic route parameter
+  params: { slug: string };
 }
 
 // Function to fetch product details from Sanity
@@ -21,14 +21,10 @@ async function getProduct(slug: string) {
 
   const product = await client.fetch(query, { slug });
 
-  if (product?.imageUrl) {
-    product.imageUrl = urlForImage(product.imageUrl).url();
-  }
-
-  return product || null; // Ensure null fallback for safety
+  return product || null; // Return `null` if no product found
 }
 
-// Function to generate metadata dynamically
+// Generate metadata dynamically for the page
 export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
@@ -46,12 +42,12 @@ export async function generateMetadata({
   };
 }
 
-// Main Product Page Component
+// Main Product Page component
 export default async function ProductPage({ params }: ProductPageProps) {
   const product = await getProduct(params.slug);
 
   if (!product) {
-    notFound(); // Redirect to 404 page if product not found
+    notFound(); // Redirect to a 404 page
   }
 
   return (
