@@ -30,7 +30,12 @@ export function ProductDetails({ product }: { product: Product }) {
       <CardHeader className="p-0">
         <div className="relative h-64 w-full">
           {product.imageUrl ? (
-            <Image src={product.imageUrl || "/placeholder.svg"} alt={product.name} layout="fill" objectFit="cover" />
+            <Image
+              src={product.imageUrl || "/placeholder.svg"}
+              alt={product.name}
+              fill
+              style={{ objectFit: "cover" }}
+            />
           ) : (
             <div className="w-full h-full bg-gray-200 flex items-center justify-center">
               <span className="text-gray-400">No image available</span>
